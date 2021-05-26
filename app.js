@@ -1,3 +1,22 @@
+Array.prototype.shuffle = function() {
+    var currentIndex = this.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = this[currentIndex];
+        this[currentIndex] = this[randomIndex];
+        this[randomIndex] = temporaryValue;
+    }
+
+    return this;
+}
+
 // Create Dino Constructor
 function Dinos() {
     this.dinos = [
@@ -91,7 +110,7 @@ function Dinos() {
 }
 
 // Create Dino Objects
-let dinos = new Dinos();
+var dinos = new Dinos();
 
 // Create Human Object
 function Human(name, feet, inches, weight, diet) {
@@ -103,6 +122,21 @@ function Human(name, feet, inches, weight, diet) {
 }
 
 var human;
+
+// Create Bird Object
+function Birds() {
+    this.birds = [{
+        "species": "Falcon",
+        "weight": 3,
+        "height": 4,
+        "diet": "carnivor",
+        "where": "North America",
+        "when": "Modern",
+        "fact": "Serves as the inspiration for Marvel's Falcon"
+    }]
+}
+
+var birds = new Birds();
 
 // Use IIFE to get human data from form
 var btn = document.getElementById('btn');
@@ -119,16 +153,17 @@ btn.addEventListener('click', (function() {
 
         var form = document.getElementById('dino-compare');
         form.remove();
-        main.style.display === "block";
+        main.style.display === 'block';
 
         var mainArr = [];
         var t;
 
+        // Add dinos to mainArr
         for (var i = 0; i < dinos.dinos.length; i++) {
             var item = dinos.dinos[i];
 
             // Create grid div
-            var dino = document.createElement("div");
+            var dino = document.createElement('div');
 
             dino.classList.add('grid-item');
 
@@ -149,11 +184,8 @@ btn.addEventListener('click', (function() {
             mainArr.push(dino);
         }
 
-        // Insert human data randomly in mainArr
-        var rndInt = Math.floor(Math.random() * 8);
-
         // create grid div
-        var humanItem = document.createElement("div");
+        var humanItem = document.createElement('div');
 
         humanItem.classList.add('grid-item');
 
@@ -163,8 +195,38 @@ btn.addEventListener('click', (function() {
         h1.appendChild(t);
         humanItem.appendChild(h1);
 
-        mainArr.splice(rndInt, 1, humanItem);
+        mainArr.push(humanItem);
 
+        // Add birds to mainArr
+        for (var i = 0; i < birds.birds.length; i++) {
+            var item = birds.birds[i];
+
+            // Create grid div
+            var bird = document.createElement('div');
+
+            bird.classList.add('grid-item');
+
+            // Add species name with h1 tags and append to bird div
+            var h1 = document.createElement('h3');
+
+            t = document.createTextNode(item.species);
+            h1.appendChild(t);
+            bird.appendChild(h1);
+
+            // Add fact
+            var p = document.createElement('p');
+
+            t = document.createTextNode(item.fact);
+            p.appendChild(t);
+            bird.appendChild(p);
+
+            mainArr.push(bird);
+        }
+
+        // shuffle
+        mainArr = mainArr.shuffle().slice(0, 9);
+
+        // Push to HTML
         mainArr.forEach(el => {
             main.appendChild(el);
         });
@@ -173,15 +235,15 @@ btn.addEventListener('click', (function() {
 
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches.
-dinos.createDino("Velociraptor", 7, 0, 35, "carnivor", "North America", "Late Cretaceous", "They are smaller than they appear in the movies");
+dinos.createDino('Velociraptor', 7, 0, 35, 'carnivor', 'North America', 'Late Cretaceous', 'They are smaller than they appear in the movies');
 
 // Create Dino Compare Method 2
 // NOTE: Weight in JSON file is in lbs, height in inches.
-dinos.createDino("Indo-Raptor", 14, 2, 70, "carnivor", "Central America", "Modern", "Made up for Jurrasic World: Lost Kingdom");
+dinos.createDino('Indo-Raptor', 14, 2, 70, 'carnivor', 'Central America', 'Modern', 'Made up for Jurrasic World: Lost Kingdom');
 
 // Create Dino Compare Method 3
 // NOTE: Weight in JSON file is in lbs, height in inches.
-dinos.createDino("Indomitus Rex", 23005, 155, "carnivor", "Central America", "Modern", "Created by INGEN for Jurassic World");
+dinos.createDino('Indomitus Rex', 23005, 155, 'carnivor', 'Central America', 'Modern', 'Created by INGEN for Jurassic World');
 
 // Generate Tiles for each Dino in Array
 
@@ -192,4 +254,4 @@ dinos.createDino("Indomitus Rex", 23005, 155, "carnivor", "Central America", "Mo
 
 // On button click, prepare and display infographic
 var main = document.getElementById('grid');
-main.style.display === "none";
+main.style.display === 'none';
