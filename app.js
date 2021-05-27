@@ -27,7 +27,8 @@ function Dinos() {
             "diet": "herbavor",
             "where": "North America",
             "when": "Late Cretaceous",
-            "fact": "First discovered in 1889 by Othniel Charles Marsh"
+            "fact": "First discovered in 1889 by Othniel Charles Marsh",
+            "image": "images/triceratops.png"
         },
         {
             "species": "Tyrannosaurus Rex",
@@ -36,7 +37,8 @@ function Dinos() {
             "diet": "carnivor",
             "where": "North America",
             "when": "Late Cretaceous",
-            "fact": "The largest known skull measures in at 5 feet long."
+            "fact": "The largest known skull measures in at 5 feet long.",
+            "image": "images/tyrannosaurus rex.png"
         },
         {
             "species": "Anklyosaurus",
@@ -45,7 +47,8 @@ function Dinos() {
             "diet": "herbavor",
             "where": "North America",
             "when": "Late Cretaceous",
-            "fact": "Anklyosaurus survived for approximately 135 million years."
+            "fact": "Anklyosaurus survived for approximately 135 million years.",
+            "image": "images/anklyosaurus.png"
         },
         {
             "species": "Brachiosaurus",
@@ -54,7 +57,8 @@ function Dinos() {
             "diet": "herbavor",
             "where": "North America",
             "when": "Late Jurasic",
-            "fact": "An asteroid was named 9954 Brachiosaurus in 1991."
+            "fact": "An asteroid was named 9954 Brachiosaurus in 1991.",
+            "image": "images/brachiosaurus.png"
         },
         {
             "species": "Stegosaurus",
@@ -63,7 +67,8 @@ function Dinos() {
             "diet": "herbavor",
             "where": "North America, Europe, Asia",
             "when": "Late Jurasic to Early Cretaceous",
-            "fact": "The Stegosaurus had between 17 and 22 seperate places and flat spines."
+            "fact": "The Stegosaurus had between 17 and 22 seperate places and flat spines.",
+            "image": "images/stegosaurus.png"
         },
         {
             "species": "Elasmosaurus",
@@ -72,7 +77,8 @@ function Dinos() {
             "diet": "carnivor",
             "where": "North America",
             "when": "Late Cretaceous",
-            "fact": "Elasmosaurus was a marine reptile first discovered in Kansas."
+            "fact": "Elasmosaurus was a marine reptile first discovered in Kansas.",
+            "image": "images/elasmosaurus.png"
         },
         {
             "species": "Pteranodon",
@@ -81,169 +87,181 @@ function Dinos() {
             "diet": "carnivor",
             "where": "North America",
             "when": "Late Cretaceous",
-            "fact": "Actually a flying reptile, the Pteranodon is not a dinosaur."
-        },
-        {
-            "species": "Pigeon",
-            "weight": 0.5,
-            "height": 9,
-            "diet": "herbavor",
-            "where": "World Wide",
-            "when": "Holocene",
-            "fact": "All birds are living dinosaurs."
+            "fact": "Actually a flying reptile, the Pteranodon is not a dinosaur.",
+            "image": "images/pteranodon.png"
         }
     ];
 
-    this.createDino = function(species, weight, height, diet, where, when, fact) {
-        var newDino = {
-            species,
-            weight,
-            height,
-            diet,
-            where,
-            when,
-            fact
+    this.compareHeight = function(human) {
+        var localDinos = this.dinos;
+        var humanHeight = human.height;
+
+        for(var i = 0; i < localDinos.length; i++) {
+            var height = localDinos[i].height;
+
+            if(humanHeight > height) {
+                localDinos[i].fact = "A human is taller than this guy!";
+            } else if(humanHeight < height) {
+                localDinos[i].fact = "A human is shorter than this guy!";
+            }
         }
 
-        this.dinos.push(newDino);
+        this.dinos = localDinos;
+    }
+
+    this.compareWeight = function(human) {
+        var localDinos = this.dinos;
+        var humanWeight = human.weight;
+
+        for(var i = 0; i < localDinos.length; i++) {
+            var weight = localDinos[i].weight;
+
+            if(humanWeight > weight) {
+                localDinos[i].fact = "A human is lighter than this guy!";
+            } else if(humanWeight < weight) {
+                localDinos[i].fact = "A human is heavier than this guy!";
+            }
+        }
+
+        this.dinos = localDinos;
+    }
+
+    this.generateRandomFact = function(human) {
+        var rndNum = Math.floor(Math.random() * 2);
+
+        switch (rndNum) {
+            case 0:  // Compare height
+                this.compareHeight(human);
+                break;
+            case 1:  // Compare weight
+                this.compareWeight(human);
+            default:
+                break;
+        }
     }
 }
 
 // Create Dino Objects
 var dinos = new Dinos();
+var dinoArr = dinos.dinos;
 
 // Create Human Object
 function Human(name, feet, inches, weight, diet) {
-    this.name = name;
-    this.feet = feet;
-    this.inches = inches;
+    this.species = name;
+    this.height = feet + (inches/12);
     this.weight = weight;
     this.diet = diet;
+    this.where = "Worldwide";
+    this.when = "Stone Age";
+    this.fact = "Its's a mircale on an astronomical level that they still exist";
+    this.image = "images/human.png";
 }
-
-var human;
 
 // Create Bird Object
 function Birds() {
     this.birds = [{
-        "species": "Falcon",
-        "weight": 3,
-        "height": 4,
-        "diet": "carnivor",
-        "where": "North America",
-        "when": "Modern",
-        "fact": "Serves as the inspiration for Marvel's Falcon"
-    }]
+        "species": "Pigeon",
+        "weight": 0.5,
+        "height": 9,
+        "diet": "herbavor",
+        "where": "World Wide",
+        "when": "Holocene",
+        "fact": "All birds are living dinosaurs.",
+        "image": "images/pigeon.png"
+    }];
 }
 
 var birds = new Birds();
+var birdArr = birds.birds;
+
+function createTile(item) {
+    var t;  // Global text node
+
+    // Create parent grid div
+    var parentDiv = document.createElement('div');
+    parentDiv.classList.add('grid-item');
+
+    // Add species name with h3 tags and append to parentDiv
+    var h3 = document.createElement('h3');
+    t = document.createTextNode(item.species);
+    h3.appendChild(t);
+    parentDiv.appendChild(h3);
+
+    // Add fact
+    var p = document.createElement('p');
+    t = document.createTextNode(item.fact);
+    p.appendChild(t);
+    parentDiv.appendChild(p);
+
+    // Add image
+    if(item.image) {
+        var image = document.createElement('img');
+        image.src = item.image;
+        parentDiv.appendChild(image);
+    }
+
+    // return parentDiv
+    return parentDiv;
+}
+
+// Remove form from index.html
+function removeForm() {
+    var form = document.getElementById('dino-compare');
+    form.remove();
+    main.style.display === 'block';
+}
 
 // Use IIFE to get human data from form
 var btn = document.getElementById('btn');
 
 btn.addEventListener('click', (function() {
     return function() {
+        var mainArr = [];
+
         var name = document.getElementById('name').value;
         var feet = document.getElementById('feet').value;
         var inches = document.getElementById('inches').value;
         var weight = document.getElementById('weight').value;
         var diet = document.getElementById('diet').value;
+        var human = new Human(name, feet, inches, weight, diet);
 
-        human = new Human(name, feet, inches, weight, diet);
+        dinos.generateRandomFact(human);
 
-        var form = document.getElementById('dino-compare');
-        form.remove();
-        main.style.display === 'block';
-
-        var mainArr = [];
-        var t;
+        removeForm();
 
         // Add dinos to mainArr
-        for (var i = 0; i < dinos.dinos.length; i++) {
-            var item = dinos.dinos[i];
+        for (var i = 0; i < dinoArr.length; i++) {
+            var item = dinoArr[i];
 
-            // Create grid div
-            var dino = document.createElement('div');
-
-            dino.classList.add('grid-item');
-
-            // Add species name with h1 tags and append to dino div
-            var h1 = document.createElement('h3');
-
-            t = document.createTextNode(item.species);
-            h1.appendChild(t);
-            dino.appendChild(h1);
-
-            // Add fact
-            var p = document.createElement('p');
-
-            t = document.createTextNode(item.fact);
-            p.appendChild(t);
-            dino.appendChild(p);
-
-            mainArr.push(dino);
+            mainArr.push(createTile(item));
         }
 
-        // create grid div
-        var humanItem = document.createElement('div');
-
-        humanItem.classList.add('grid-item');
-
-        // add name
-        var h1 = document.createElement('h3');
-        t = document.createTextNode(human.name);
-        h1.appendChild(t);
-        humanItem.appendChild(h1);
-
-        mainArr.push(humanItem);
+        // Add human to mainArr
+        mainArr.push(createTile(human));
 
         // Add birds to mainArr
-        for (var i = 0; i < birds.birds.length; i++) {
-            var item = birds.birds[i];
+        for(var i = 0; i < birdArr.length; i++) {
+            var item = birdArr[i];
 
-            // Create grid div
-            var bird = document.createElement('div');
-
-            bird.classList.add('grid-item');
-
-            // Add species name with h1 tags and append to bird div
-            var h1 = document.createElement('h3');
-
-            t = document.createTextNode(item.species);
-            h1.appendChild(t);
-            bird.appendChild(h1);
-
-            // Add fact
-            var p = document.createElement('p');
-
-            t = document.createTextNode(item.fact);
-            p.appendChild(t);
-            bird.appendChild(p);
-
-            mainArr.push(bird);
+            mainArr.push(createTile(item));
         }
 
         // shuffle
         mainArr = mainArr.shuffle().slice(0, 9);
 
         // Push to HTML
-        mainArr.forEach(el => {
-            main.appendChild(el);
-        });
+        mainArr.forEach(el => main.appendChild(el));
     }
 })());
 
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches.
-dinos.createDino('Velociraptor', 7, 0, 35, 'carnivor', 'North America', 'Late Cretaceous', 'They are smaller than they appear in the movies');
 
 // Create Dino Compare Method 2
 // NOTE: Weight in JSON file is in lbs, height in inches.
-dinos.createDino('Indo-Raptor', 14, 2, 70, 'carnivor', 'Central America', 'Modern', 'Made up for Jurrasic World: Lost Kingdom');
 
 // Create Dino Compare Method 3
 // NOTE: Weight in JSON file is in lbs, height in inches.
-dinos.createDino('Indomitus Rex', 23005, 155, 'carnivor', 'Central America', 'Modern', 'Created by INGEN for Jurassic World');
 
 // Generate Tiles for each Dino in Array
 
